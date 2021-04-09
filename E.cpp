@@ -1,58 +1,66 @@
 #include<stdio.h>
 #include<string.h>
-#include <stdbool.h>
-int digit_sum(int n){
-    int sum = 0;
+int digit_count(int n){
+    int m=0;
     while(n){
-        sum+=(n%10);
+        m++;
         n/=10;
     }
-    return sum;
+    return m;
 }
 void solve(){
     int t;
     scanf("%d",&t);
     while(t--){
-        int n,m,sum = 0;
-        bool flag[15] = {};
+        int n,m,sum = 0,mm=0,nn=0;
+        int flag[15] = {};
         char s[500010]="";
         scanf("%d",&n);
-        for(int i=1;i<=n;i++){
-            char ss[5]="";
-            sprintf(ss,"%d",i);
-            strcat(s,ss);
-            sum += digit_sum(i);
+        for(int i=n;i>0;i--){
+            mm+=digit_count(i);
+            if(mm>=4){
+                nn = i;
+                break;
+            }
         }
+        for(int i=nn;i<=n;i++){
+            char ss[5]="";
+			//sprintf is used to convert int to string 
+            sprintf(ss,"%d",i);
+			//scat is used for concat two diffirent string
+            strcat(s,ss);
+        }
+        sum = (n*(n+1))/2;
+		//strlen return us the length of the string
         int l = strlen(s);
         int last_2digit = (s[l-2]-'0')*10 + (s[l-1]-'0');
         int last_4digit = (s[l-4]-'0')*1000 + (s[l-3]-'0')*100+(s[l-2]-'0')*10 + (s[l-1]-'0');
         if(s[l-1] == '0' || s[l-1] == '2' || s[l-1] == '4' || s[l-1] == '6' || s[l-1] == '8'){
-            flag[2] = true;
+            flag[2] = 1;
         }
-
         if(sum%3==0){
-            flag[3] = true;
+            flag[3] = 1;
         }
 
         if(last_2digit%4==0){
-            flag[4] = true;
+            flag[4] = 1;
         }
 
         if(s[l-1] == '5' || s[l-1]=='0'){
-            flag[5] = true;
+            flag[5] = 1;
         }
 
         if(flag[2] && flag[3]){
-            flag[6] = true;
+            flag[6] = 1;
         }
 
         if(last_4digit % 8 == 0){
-            flag[8] = true;
-        }
-        if(sum % 9 ==0){
-            flag[9] = true;
+            flag[8] = 1;
         }
 
+        if(sum % 9 ==0){
+            flag[9] = 1;
+        }
         if(flag[2] && flag[4] && flag[6] && flag[8]){
             printf("TANJIRO\n");
         }else if(flag[3] && flag[5] && flag[9]){
